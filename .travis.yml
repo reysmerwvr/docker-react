@@ -1,5 +1,5 @@
 language: generic
-sudo: require
+sudo: required
 services:
   - docker
 
@@ -9,6 +9,10 @@ before_install:
 #  - docker run USERNAME/docker-react npm run test -- --coverage
 script:
   - docker run -e CI=true reysmerwvr/docker-react npm run test
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push reysmerwvr/docker-react
 
 deploy:
   provider: elasticbeanstalk
